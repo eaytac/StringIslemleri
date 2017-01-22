@@ -1,20 +1,15 @@
 package com.vektorel.java.string;
 
-public class StringIslemleri {
+import java.io.File;
+import java.util.Scanner;
+
+public class DosyadanStringIslemleri1 {
+	
+	static String fileSeparator = System.getProperty("file.separator");
 
 	public static void main(String[] args) {
-		final String metin = 
-			"@PatNo:234562@Pat:Taner TEMEL@Age:45@HBG:23@AG:45@#" +
-			"@PatNo:234563@Pat:Kemal TEMEL@Age:34@HBG:23@AG:45@#" +
-			"@PatNo:234564@Pat:Cemal TEMEL@Age:23@HBG:23@AG:45@#" + 
-			"@PatNo:234565@Pat:Ayþe TEMEL@Age:5@HBG:23@AG:45@#  " +
-			"@PatNo:234566@Pat:Fatma TEMEL@Age:75@HBG:23@AG:45@#" +
-			"@PatNo:234562@Pat:Taner TEMEL@Age:45@HBG:23@AG:45@#" +
-			"@PatNo:234563@Pat:Kemal TEMEL@Age:34@HBG:23@AG:45@#" +
-			"@PatNo:234565@Pat:Ayþe TEMEL@Age:5@HBG:23@AG:45@#  " +
-			"@PatNo:234566@Pat:Fatma TEMEL@Age:75@HBG:23@AG:45@#";
+		String metin = dosyaOku();
 		
-	
 		String[] satirlar = metin.split("#");
 		
 		for (int i = 0; i < satirlar.length; i++) {
@@ -31,4 +26,19 @@ public class StringIslemleri {
 			System.out.println("----------------------------------------");
 		}
 	}
+	
+	private static String dosyaOku() {
+		String icerik = "";
+		try {
+			File file = new File(System.getProperty("user.dir")+ fileSeparator +"metin.txt");
+			Scanner scanner = new Scanner(file);
+			while (scanner.hasNext()) {
+				icerik += scanner.nextLine();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return icerik;
+	}
+
 }
