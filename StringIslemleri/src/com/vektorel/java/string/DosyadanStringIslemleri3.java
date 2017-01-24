@@ -1,10 +1,15 @@
 package com.vektorel.java.string;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class DosyadanStringIslemleri1 {
+public class DosyadanStringIslemleri3 {
 	
 	static String dosyaAyraci = System.getProperty("file.separator");
 	static String satirAyraci = System.getProperty("line.separator");
@@ -63,16 +68,30 @@ int menu = scanner.nextInt();
 	}
 	
 	private static String dosyaOku() {
-		String icerik = "";
+		String icerik = "", satir = "";
+		
+		File file = new File(dosyaYolu + dosyaAyraci +"metin3.txt");
+		
 		try {
-			File file = new File(dosyaYolu + dosyaAyraci +"metin1.txt");
-			Scanner scanner = new Scanner(file);
-			while (scanner.hasNext()) {
-				icerik += scanner.nextLine();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            FileReader fileReader = new FileReader(file);
+
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            while((satir = bufferedReader.readLine()) != null) {
+            	icerik += satir;
+            }   
+
+            bufferedReader.close();         
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println(
+                "Dosya açýlamýyor: '" + file + "'");                
+        }
+        catch(IOException ex) {
+            System.out.println(
+                "Dosya okunmasýnda hata: '" + file + "'");                  
+        }
+	
 		return icerik;
 	}
 	
@@ -94,26 +113,28 @@ int menu = scanner.nextInt();
 		System.out.print("AG: ");
 		String hastaAG = scanner.nextLine();
 		
-		try {
-			File file = new File(dosyaYolu + dosyaAyraci +"metin1.txt");
-			
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			
-			String metin = satirAyraci + "@PatNo:" + hastaNo + "@Pat:" + hastaAdiSoyadi + "@Age:" + hastaYasi + "@HBG:" + hastaHBG + "@AG:" + hastaAG + "@#";		
+		 try {
+			 	File file = new File(dosyaYolu + dosyaAyraci +"metin3.txt");
+			 	
+				if (!file.exists()) {
+					file.createNewFile();
+				}
+			 	
+			 	FileWriter fileWriter = new FileWriter(file, true);
 
-			FileWriter writer = new FileWriter(file, true); 
-		      
-			writer.write(metin); 
-	      	writer.flush();
-	      	writer.close();
+	            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+	            
+	            String metin = satirAyraci + "@PatNo:" + hastaNo + "@Pat:" + hastaAdiSoyadi + "@Age:" + hastaYasi + "@HBG:" + hastaHBG + "@AG:" + hastaAG + "@#";
+	            
+	            bufferedWriter.write(metin);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
+	            bufferedWriter.close();
+	        }
+	        catch(IOException ex) {
+	            ex.printStackTrace();
+	        }
+	
 	}
 
 }
+

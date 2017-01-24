@@ -1,10 +1,11 @@
 package com.vektorel.java.string;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Scanner;
 
-public class DosyadanStringIslemleri1 {
+public class DosyadanStringIslemleri2 {
 	
 	static String dosyaAyraci = System.getProperty("file.separator");
 	static String satirAyraci = System.getProperty("line.separator");
@@ -64,15 +65,23 @@ int menu = scanner.nextInt();
 	
 	private static String dosyaOku() {
 		String icerik = "";
-		try {
-			File file = new File(dosyaYolu + dosyaAyraci +"metin1.txt");
-			Scanner scanner = new Scanner(file);
-			while (scanner.hasNext()) {
-				icerik += scanner.nextLine();
+		
+		File file = new File(dosyaYolu + dosyaAyraci +"metin2.txt");
+	
+		try(FileInputStream fis = new FileInputStream(file)) {
+
+			byte[] buffer = new byte[1024];
+						
+			while(fis.available() > 0) {
+
+				int read = fis.read(buffer);
+				
+				icerik = new String(buffer, 0, read);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		catch (Exception e) {
+		}
+
 		return icerik;
 	}
 	
@@ -95,20 +104,17 @@ int menu = scanner.nextInt();
 		String hastaAG = scanner.nextLine();
 		
 		try {
-			File file = new File(dosyaYolu + dosyaAyraci +"metin1.txt");
-			
+			File file = new File(dosyaYolu + dosyaAyraci +"metin2.txt");
+
 			if (!file.exists()) {
 				file.createNewFile();
 			}
 			
-			String metin = satirAyraci + "@PatNo:" + hastaNo + "@Pat:" + hastaAdiSoyadi + "@Age:" + hastaYasi + "@HBG:" + hastaHBG + "@AG:" + hastaAG + "@#";		
-
-			FileWriter writer = new FileWriter(file, true); 
-		      
-			writer.write(metin); 
-	      	writer.flush();
-	      	writer.close();
-
+			FileOutputStream fileOutputStream = new FileOutputStream(file, true);
+			String metin = satirAyraci + "@PatNo:" + hastaNo + "@Pat:" + hastaAdiSoyadi + "@Age:" + hastaYasi + "@HBG:" + hastaHBG + "@AG:" + hastaAG + "@#";			
+			
+			fileOutputStream.write(metin.getBytes());
+			fileOutputStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,3 +123,4 @@ int menu = scanner.nextInt();
 	}
 
 }
+
